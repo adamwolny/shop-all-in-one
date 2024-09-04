@@ -12,12 +12,10 @@ import React, { Key } from "react";
 import { Button } from "@nextui-org/button";
 import { DeleteIcon } from "@nextui-org/shared-icons";
 import { Image } from "@nextui-org/image";
+import currency from "currency.js";
 
 import { ProductType } from "@/types/api.types";
 import { useCart } from "@/hooks/useCart";
-
-import currency from "currency.js";
-
 
 const columns = [
   { name: "Image", uid: "image" },
@@ -68,12 +66,15 @@ const CartTable = () => {
       case "quantity":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{quantity}</p>
+            <p className="text-bold text-sm capitalize">
+              <span className="md:hidden">Quantity: </span>
+              {quantity}
+            </p>
           </div>
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2 w-max">
+          <div className="w-full relative flex items-center justify-end gap-2">
             <Button
               className="text-sm font-normal text-default-600 bg-default-100"
               variant="flat"
@@ -108,6 +109,7 @@ const CartTable = () => {
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
+            className="hidden md:table-cell"
           >
             {column.name}
           </TableColumn>
@@ -115,7 +117,10 @@ const CartTable = () => {
       </TableHeader>
       <TableBody>
         {products.map((item) => (
-          <TableRow key={item.product.id}>
+          <TableRow
+            key={item.product.id}
+            className="flex flex-col flex-no md:table-row"
+          >
             {(columnKey) => (
               <TableCell>
                 {renderCell(item.product, item.quantity, columnKey)}
